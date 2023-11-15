@@ -38,9 +38,9 @@ def main():
 
         p1Score = 0
         p2Score = 0
-        lost = "Round Lost!"
+        lost = "Round Lost!\n"
         lost = lost.encode()
-        won = "Round Won!"
+        won = "Round Won!\n"
         won = won.encode()
         for x in range(3):
                 P1num = Player1.recv(1024)
@@ -53,12 +53,14 @@ def main():
                         Player1.send(won)
                         Player2.send(lost)
                         p1Score += 1
+        winner = "You won!"
+        loser = "You lost!"
         if (p1Score < p2Score):
-                winner = "Player 2 is the winner!"
+                Player1.send(loser.encode())
+                Player2.send(winner.encode())
         else:
-                winner = "Player 1 is the winner!"
-        Player1.send(winner.encode())
-        Player2.send(winner.encode())
+                Player1.send(winner.encode())
+                Player2.send(loser.encode())
         Player1.close()
         Player2.close()
            

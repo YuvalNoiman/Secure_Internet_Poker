@@ -5,7 +5,7 @@ from random import randint
 def main():
 
 
-    # Create a two socket
+    # Create two sockets
     P1Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     P2Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Associate the socket with the port

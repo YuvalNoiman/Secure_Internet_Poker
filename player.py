@@ -27,20 +27,20 @@ def main(player_number):
     #round 1
     print(Parray)
     number_picked = input("Pick a number 1-3 which corresponds to shown value: ")
-    Player.send(Parray[int(number_picked)-1].encode())
+    Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
     Parray.pop(int(number_picked)-1)
     win_or_loss = Player.recv(1024)
     print(win_or_loss.decode())
     #round2
     print(Parray)
     number_picked = input("Pick a number 1-2 which corresponds to shown value: ")
-    Player.send(Parray[int(number_picked)-1].encode())
+    Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
     Parray.pop(int(number_picked)-1)
     win_or_loss = Player.recv(1024)
     print(win_or_loss.decode())
     #round3
     print("Your only number left is: " + Parray[0])
-    Player.send(Parray[0].encode())
+    Player.send(Pcipher.encrypt(pad(Parray[0].encode(),16)))
     win_or_loss = Player.recv(1024)
     print(win_or_loss.decode())
     #recv results

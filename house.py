@@ -48,7 +48,9 @@ def main():
         won = won.encode()
         for x in range(3):
                 P1num = Player1.recv(1024)
+                P1num = unpad(P1cipher.decrypt(P1num),16)
                 P2num = Player2.recv(1024)
+                P2num = unpad(P2cipher.decrypt(P2num),16)
                 if (int(P1num.decode()) < int(P2num.decode())):
                         Player1.send(lost)
                         Player2.send(won)

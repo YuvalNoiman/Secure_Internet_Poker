@@ -1,11 +1,14 @@
 import socket
 from random import randint
+from Cryptodome.Cipher import AES
+from Cryptodome.Util.Padding import pad
+from Cryptodome.Util.Padding import unpad
 
 
 def main():
 
 
-    # Create two sockets
+    # Create a two socket
     P1Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     P2Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Associate the socket with the port
@@ -26,15 +29,16 @@ def main():
         # Receive the data the client has to send.
         # This will receive at most 1024 bytes
         P1SessionKey = Player1.recv(1024)
+        P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = Player2.recv(1024)
+        P2cipher = AES.new(P2SessionKey, AES.MODE_ECB)
 
 	# Generates player one's numbers
         p1numbers = str(randint(1, 15)) + " " + str(randint(1, 15)) + " " + str(randint(1, 15))
 	# Generates player two's numbers
         p2numbers = str(randint(1, 15)) + " " + str(randint(1, 15)) + " " + str(randint(1, 15))
-	
-        Player1.send(p1numbers.encode())
-        Player2.send(p2numbers.encode())
+        Player1.send(P1cipher.encrypt(pad(p1numbers.encode(), 16)))
+        Player2.send(P2cipher.encrypt(pad(p2numbers.encode(), 16)))
 
         p1Score = 0
         p2Score = 0

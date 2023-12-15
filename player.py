@@ -1,5 +1,10 @@
 import socket
 import sys
+from Cryptodome.Cipher import AES
+import secrets
+import string
+from Cryptodome.Util.Padding import pad
+from Cryptodome.Util.Padding import unpad
 
 def main(player_number):
 
@@ -10,9 +15,14 @@ def main(player_number):
     else:
         Player.connect(("127.0.0.1", 1235)) #attempts to create at specified IP at specified port
     #sends session key
-    PSessionKey = "0"
-    Player.send(PSessionKey.encode())
+    PSessionKey = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
+              for i in range(16))
+    PSessionKey = PSessionKey.encode()
+    Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
+    #PSessionKey = bytes(PSessionKey,"UTF-8")
+    Player.send(PSessionKey)
     pnumbers = Player.recv(1024)
+    pnumbers = unpad(Pcipher.decrypt(pnumbers),16)
     Parray = pnumbers.decode().split(" ")
     #round 1
     print(Parray)
@@ -41,3 +51,4 @@ def main(player_number):
 if __name__ == "__main__":
     player_number = sys.argv[1]
     main(int(player_number))
+

@@ -3,10 +3,10 @@ from random import randint
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
 from Cryptodome.Util.Padding import unpad
-
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Cipher import PKCS1_OAEP
 
 def main():
-
 
     # Create a two socket
     P1Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,11 +26,16 @@ def main():
         print("Player1 connected from: " + str(P1Info))
         print("Player2 connected from: " + str(P2Info))
 
+        PB1 = RSA.import_key(open("pub01.pem").read())
+        PB2 = RSA.import_key(open("pub02.pem").read())
+        rsa_decrypt1 = PKCS1_OAEP.new(PB1, hashAlgo=None, mgfunc=None, randfunc=None)
+        rsa_decrypt2 = PKCS1_OAEP.new(PB2, hashAlgo=None, mgfunc=None, randfunc=None)
+
         # Receive the data the client has to send.
         # This will receive at most 1024 bytes
-        P1SessionKey = Player1.recv(1024)
+        P1SessionKey = rsa_decrypt1.decrypt(Player1.recv(1024)).decode()
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
-        P2SessionKey = Player2.recv(1024)
+        P2SessionKey = rsa_decrypt2.decrypt(Player2.recv(1024)).decode()
         P2cipher = AES.new(P2SessionKey, AES.MODE_ECB)
 
 	# Generates player one's numbers

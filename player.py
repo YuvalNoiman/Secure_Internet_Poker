@@ -14,29 +14,33 @@ def main(player_number):
     Player = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket created
     if player_number == 1:
         Player.connect(("127.0.0.1", 1234)) #attempts to create at specified IP at specified port
+        rsa_sig = RSA.import_key(open("priv01RSA.pem").read())
+        dsa_sig = open("priv01DSA.pem", "r")
     else:
         Player.connect(("127.0.0.1", 1235)) #attempts to create at specified IP at specified port
+        rsa_sig = RSA.import_key(open("priv02RSA.pem").read())
+        dsa_sig = open("priv02DSA.pem", "r")
 
     #sends session key
     pubKey = RSA.import_key(open("pubhouse.pem").read())
     PSessionKey = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
               for i in range(16))
+    PSessionKey = PSessionKey.encode()
     rsa_encrypt = PKCS1_OAEP.new(pubKey, hashAlgo=None, mgfunc=None, randfunc=None)
-
+    hash = SHA256.new(PSessionKey)
     #picks signature type
-    signature = ""
     while True:
         number_picked = input("Type number 1 for RSA and number 2 for DSA: ")
         if (number_picked == "1"):
-            signature = "RSA"
+            signature = pss.new(rsa_sig).sign(hash)
             break
         elif (number_picked == "2"):
-            signature = "DSA"
+            signer = DSS.new(dsa_sig, 'fips-186-3')
+            signature = signer.sign(hash)
             break
         else:
             print("Type a valid number!")	
 
-    PSessionKey = PSessionKey.encode()
     Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
     PSK = rsa_encrypt.encrypt(PSessionKey)
     Player.send(PSK)

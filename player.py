@@ -1,12 +1,12 @@
 import socket
 import sys
-from Cryptodome.Cipher import AES
 import secrets
 import string
-from Cryptodome.Util.Padding import pad
-from Cryptodome.Util.Padding import unpad
-from Cryptodome.PublicKey import RSA
-from Cryptodome.Cipher import PKCS1_OAEP
+from Cryptodome.Util.Padding import pad, unpad
+from Cryptodome.PublicKey import RSA, DSA
+from Cryptodome.Cipher import AES, PKCS1_OAEP
+from Cryptodome.Signature import DSS, pss
+from Cryptodome.Hash import SHA256
 
 def main(player_number):
 

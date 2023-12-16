@@ -1,10 +1,10 @@
 import socket
 from random import randint
-from Cryptodome.Cipher import AES
-from Cryptodome.Util.Padding import pad
-from Cryptodome.Util.Padding import unpad
-from Cryptodome.PublicKey import RSA
-from Cryptodome.Cipher import PKCS1_OAEP
+from Cryptodome.Cipher import AES, PKCS1_OAEP
+from Cryptodome.Util.Padding import pad, unpad
+from Cryptodome.PublicKey import RSA, DSA
+from Cryptodome.Signature import DSS, pss
+from Cryptodome.Hash import SHA256
 
 def main():
 

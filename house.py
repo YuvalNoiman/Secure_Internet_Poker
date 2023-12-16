@@ -18,6 +18,12 @@ def main():
     P2new = True
     privKey = RSA.import_key(open("privhouse.pem").read())
     rsa_decrypt = PKCS1_OAEP.new(privKey, hashAlgo=None, mgfunc=None, randfunc=None)
+    lost = "Round Lost!\n".encode()
+    won = "Round Won!\n".encode()
+    tie = "Round tied!\n".encode()
+    winner = "You won!\n".encode()
+    loser = "You lost!\n".encode()
+    tied = "You tied!\n".encode()
 
     while True:
         if (P1new or P2new):
@@ -93,38 +99,28 @@ def main():
 
         p1Score = 0
         p2Score = 0
-        lost = "Round Lost!\n"
-        lost = lost.encode()
-        won = "Round Won!\n"
-        won = won.encode()
-        tie = "Round tied!\n"
-        tie = tie.encode()
         for x in range(3):
-            P1num = Player1.recv(1024)
-            P1num = unpad(P1cipher.decrypt(P1num),16)
-            P2num = Player2.recv(1024)
-            P2num = unpad(P2cipher.decrypt(P2num),16)
-            if (int(P1num.decode()) < int(P2num.decode())):
+            P1num = unpad(P1cipher.decrypt(Player1.recv(1024)),16).decode()
+            P2num = unpad(P2cipher.decrypt(Player2.recv(1024)),16).decode()
+            if (int(P1num) < int(P2num)):
                 Player1.send(P1cipher.encrypt(pad(lost, 16)))
                 Player2.send(P2cipher.encrypt(pad(won, 16)))
                 p2Score += 1
-            elif (int(P1num.decode()) > int(P2num.decode())):
+            elif (int(P1num) > int(P2num)):
                 Player1.send(P1cipher.encrypt(pad(won, 16)))
                 Player2.send(P2cipher.encrypt(pad(lost, 16)))
                 p1Score += 1
             else:
                 Player1.send(P1cipher.encrypt(pad(tie, 16)))
                 Player2.send(P2cipher.encrypt(pad(tie, 16)))
-        winner = "You won!"
-        loser = "You lost!"
-        tied = "You tied!"
-        tied = tied.encode()
+
+        #determine winner
         if (p1Score < p2Score):
-            Player1.send(P1cipher.encrypt(pad(loser.encode(), 16)))
-            Player2.send(P2cipher.encrypt(pad(winner.encode(), 16)))
+            Player1.send(P1cipher.encrypt(pad(loser, 16)))
+            Player2.send(P2cipher.encrypt(pad(winner, 16)))
         elif (p1Score > p2Score):
-            Player1.send(P1cipher.encrypt(pad(winner.encode(), 16)))
-            Player2.send(P2cipher.encrypt(pad(loser.encode(), 16)))
+            Player1.send(P1cipher.encrypt(pad(winner, 16)))
+            Player2.send(P2cipher.encrypt(pad(loser, 16)))
         else:
             Player1.send(P1cipher.encrypt(pad(tied, 16)))
             Player2.send(P2cipher.encrypt(pad(tied, 16)))

@@ -30,7 +30,6 @@ def main(player_number):
     #sends session key
     pubKey = RSA.import_key(open("pubhouse.pem").read())
     PSessionKey = get_random_bytes(16)
-    #PSessionKey = PSessionKey.encode()
     rsa_encrypt = PKCS1_OAEP.new(pubKey, hashAlgo=None, mgfunc=None, randfunc=None)
     Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
     PSK = rsa_encrypt.encrypt(PSessionKey)
@@ -48,7 +47,6 @@ def main(player_number):
             break
         else:
             print("Type a valid number!")	
-    #print(signature)
     Player.send(signature)
 
     while True:

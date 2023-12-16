@@ -47,7 +47,7 @@ def main(player_number):
             break
         else:
             print("Type a valid number!")	
-
+    #print(signature)
     Player.send(signature)
     pnumbers = Player.recv(1024)
     pnumbers = unpad(Pcipher.decrypt(pnumbers),16)

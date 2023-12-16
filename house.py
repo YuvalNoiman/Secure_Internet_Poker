@@ -35,7 +35,7 @@ def main():
         P1Hash = SHA256.new(P1SessionKey)
         P1Signature = Player1.recv(1024)
         try:
-            P1key = RSA.import_key(open('pub01RSA').read())
+            P1key = RSA.import_key(open("pub01RSA.pem").read())
             verifier = pss.new(P1key)
             verifier.verify(P1Hash, P1Signature)
         except:
@@ -52,7 +52,7 @@ def main():
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
         P2Signature = Player2.recv(1024)
         try:
-            P2key = RSA.import_key(open('pub02RSA').read())
+            P2key = RSA.import_key(open("pub02RSA.pem").read())
             verifier = pss.new(P2key)
             verifier.verify(P2Hash, P2Signature)
         except:

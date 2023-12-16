@@ -34,13 +34,13 @@ def main():
         P1SessionKey = rsa_decrypt.decrypt(Player1.recv(1024))
         P1Hash = SHA256.new(P1SessionKey)
         P1Signature = Player1.recv(1024)
-        #secure = 0
+        secure = 0
         try:
             P1key = RSA.import_key(open("pub01RSA.pem").read())
             verifier = pss.new(P1key)
             verifier.verify(P1Hash, P1Signature)
         except:
-            #secure += 1
+            secure += 1
             print("P1 using DSA signature")
         try:
             dsa = open("pub01DSA.pem", "r")
@@ -49,11 +49,11 @@ def main():
             verifier = DSS.new(P1key, 'fips-186-3')
             verifier.verify(P1Hash, P1Signature)
         except:
-            #secure += 1
+            secure += 1
             print("P1 using RSA signature")
-        #if (secure == 2):
-        #    print("P1 session key not verified")
-        #secure = 0
+        if (secure == 2):
+            print("P1 session key not verified")
+        secure = 0
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
         P2Hash = SHA256.new(P2SessionKey)
@@ -63,7 +63,7 @@ def main():
             verifier = pss.new(P2key)
             verifier.verify(P2Hash, P2Signature)
         except:
-            #secure += 1
+            secure += 1
             print("P2 using DSA signature")
         try:
             dsa = open("pub02DSA.pem", "r")
@@ -72,10 +72,10 @@ def main():
             verifier = DSS.new(P2key, 'fips-186-3')
             verifier.verify(P2Hash, P2Signature)
         except:
-            #secure += 1
+            secure += 1
             print("P2 using RSA signature")
-        #if (secure == 2):
-        #    print("P2 session key not verified")
+        if (secure == 2):
+            print("P2 session key not verified")
         P2cipher = AES.new(P2SessionKey, AES.MODE_ECB)
 
 	# Generates player one's numbers

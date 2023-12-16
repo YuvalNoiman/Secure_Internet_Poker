@@ -84,6 +84,7 @@ def main(player_number):
     #recv results
     win_or_loss = Player.recv(1024)
     print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
+    del PSessionKey, Pcipher, PSK, hash
 	
 
 if __name__ == "__main__":

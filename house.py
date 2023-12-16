@@ -59,21 +59,21 @@ def main():
                 P2num = Player2.recv(1024)
                 P2num = unpad(P2cipher.decrypt(P2num),16)
                 if (int(P1num.decode()) < int(P2num.decode())):
-                        Player1.send(lost)
-                        Player2.send(won)
+                        Player1.send(P1cipher.encrypt(pad(lost, 16)))
+                        Player2.send(P2cipher.encrypt(pad(won, 16)))
                         p2Score += 1
                 else:
-                        Player1.send(won)
-                        Player2.send(lost)
+                        Player1.send(P1cipher.encrypt(pad(won, 16)))
+                        Player2.send(P2cipher.encrypt(pad(lost, 16)))
                         p1Score += 1
         winner = "You won!"
         loser = "You lost!"
         if (p1Score < p2Score):
-                Player1.send(loser.encode())
-                Player2.send(winner.encode())
+                Player1.send(P1cipher.encrypt(pad(loser.encode(), 16)))
+                Player2.send(P2cipher.encrypt(pad(winner.encode(), 16)))
         else:
-                Player1.send(winner.encode())
-                Player2.send(loser.encode())
+                Player1.send(P1cipher.encrypt(pad(winner.encode(), 16)))
+                Player2.send(P2cipher.encrypt(pad(loser.encode(), 16)))
         Player1.close()
         Player2.close()
            

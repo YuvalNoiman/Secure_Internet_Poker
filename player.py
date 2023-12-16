@@ -34,22 +34,22 @@ def main(player_number):
     Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
     Parray.pop(int(number_picked)-1)
     win_or_loss = Player.recv(1024)
-    print(win_or_loss.decode())
+    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
     #round2
     print(Parray)
     number_picked = input("Pick a number 1-2 which corresponds to shown value: ")
     Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
     Parray.pop(int(number_picked)-1)
     win_or_loss = Player.recv(1024)
-    print(win_or_loss.decode())
+    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
     #round3
     print("Your only number left is: " + Parray[0])
     Player.send(Pcipher.encrypt(pad(Parray[0].encode(),16)))
     win_or_loss = Player.recv(1024)
-    print(win_or_loss.decode())
+    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
     #recv results
     win_or_loss = Player.recv(1024)
-    print(win_or_loss.decode())
+    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
 	
 
 if __name__ == "__main__":

@@ -11,18 +11,21 @@ def main(player_number):
 
     #creates socket
     Player = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket created
-    if player_number == 1:
+    if player_number == "1":
         Player.connect(("127.0.0.1", 1234)) #attempts to create at specified IP at specified port
         rsa_sig = RSA.import_key(open("priv01RSA.pem").read())
         dsa = open("priv01DSA.pem", "r")
         dsa_sig = DSA.import_key(dsa.read())
         dsa.close()
-    else:
+    elif player_number == "2":
         Player.connect(("127.0.0.1", 1235)) #attempts to create at specified IP at specified port
         rsa_sig = RSA.import_key(open("priv02RSA.pem").read())
         dsa = open("priv02DSA.pem", "r")
         dsa_sig = DSA.import_key(dsa.read())
         dsa.close()
+    else:
+        print("Please try again entering 1 for Player 1 or 2 for Player 2!")
+        return -1
 
     #sends session key
     pubKey = RSA.import_key(open("pubhouse.pem").read())
@@ -87,5 +90,5 @@ def main(player_number):
 
 if __name__ == "__main__":
     player_number = sys.argv[1]
-    main(int(player_number))
+    main(player_number)
 

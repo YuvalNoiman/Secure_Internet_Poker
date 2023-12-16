@@ -30,14 +30,24 @@ def main(player_number):
     Parray = pnumbers.decode().split(" ")
     #round 1
     print(Parray)
-    number_picked = input("Pick a number 1-3 which corresponds to shown value: ")
+    while True:
+        number_picked = input("Pick a number 1-3 which corresponds to shown value: ")
+        if (number_picked == "1" or number_picked == "2" or number_picked == "3"):
+            break
+        else:
+            print("Pick a valid number!")
     Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
     Parray.pop(int(number_picked)-1)
     win_or_loss = Player.recv(1024)
     print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
     #round2
     print(Parray)
-    number_picked = input("Pick a number 1-2 which corresponds to shown value: ")
+    while True:
+        number_picked = input("Pick a number 1-2 which corresponds to shown value: ")
+        if (number_picked == "1" or number_picked == "2"):
+            break
+        else:
+            print("Pick a valid number!")
     Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
     Parray.pop(int(number_picked)-1)
     win_or_loss = Player.recv(1024)

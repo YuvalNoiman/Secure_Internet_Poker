@@ -50,42 +50,55 @@ def main(player_number):
             print("Type a valid number!")	
     #print(signature)
     Player.send(signature)
-    pnumbers = Player.recv(1024)
-    pnumbers = unpad(Pcipher.decrypt(pnumbers),16)
-    Parray = pnumbers.decode().split(" ")
-    #round 1
-    print(Parray)
+
     while True:
-        number_picked = input("Pick a number 1-3 which corresponds to shown value: ")
-        if (number_picked == "1" or number_picked == "2" or number_picked == "3"):
-            break
-        else:
-            print("Pick a valid number!")
-    Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
-    Parray.pop(int(number_picked)-1)
-    win_or_loss = Player.recv(1024)
-    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
-    #round2
-    print(Parray)
-    while True:
-        number_picked = input("Pick a number 1-2 which corresponds to shown value: ")
-        if (number_picked == "1" or number_picked == "2"):
-            break
-        else:
-            print("Pick a valid number!")
-    Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
-    Parray.pop(int(number_picked)-1)
-    win_or_loss = Player.recv(1024)
-    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
-    #round3
-    print("Your only number left is: " + Parray[0])
-    Player.send(Pcipher.encrypt(pad(Parray[0].encode(),16)))
-    win_or_loss = Player.recv(1024)
-    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
-    #recv results
-    win_or_loss = Player.recv(1024)
-    print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
-    del PSessionKey, Pcipher, PSK, hash
+        pnumbers = Player.recv(1024)
+        pnumbers = unpad(Pcipher.decrypt(pnumbers),16)
+        Parray = pnumbers.decode().split(" ")
+        #round 1
+        print(Parray)
+        while True:
+            number_picked = input("Pick a number 1-3 which corresponds to shown value: ")
+            if (number_picked == "1" or number_picked == "2" or number_picked == "3"):
+                break
+            else:
+                print("Pick a valid number!")
+        Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
+        Parray.pop(int(number_picked)-1)
+        win_or_loss = Player.recv(1024)
+        print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
+        #round2
+        print(Parray)
+        while True:
+            number_picked = input("Pick a number 1-2 which corresponds to shown value: ")
+            if (number_picked == "1" or number_picked == "2"):
+                break
+            else:
+                print("Pick a valid number!")
+        Player.send(Pcipher.encrypt(pad(Parray[int(number_picked)-1].encode(),16)))
+        Parray.pop(int(number_picked)-1)
+        win_or_loss = Player.recv(1024)
+        print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
+        #round3
+        print("Your only number left is: " + Parray[0])
+        Player.send(Pcipher.encrypt(pad(Parray[0].encode(),16)))
+        win_or_loss = Player.recv(1024)
+        print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
+        #recv results
+        win_or_loss = Player.recv(1024)
+        print(unpad(Pcipher.decrypt(win_or_loss),16).decode())
+        #ask if player if they want to play again
+        while True:
+            number_picked = input("Type number 1 for Play Again and number 2 for Done Playing: ")
+            if (number_picked == "1"):
+                Player.send(Pcipher.encrypt(pad("Play Again".encode(),16)))
+                break
+            elif (number_picked == "2"):
+                Player.send(Pcipher.encrypt(pad("Done Playing".encode(),16)))
+                del PSessionKey, Pcipher, PSK, hash
+                return 1
+            else:
+                print("Type a valid number!")	
 	
 
 if __name__ == "__main__":

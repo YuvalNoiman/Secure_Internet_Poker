@@ -32,10 +32,37 @@ def main():
         # Receive the data the client has to send.
         # This will receive at most 1024 bytes
         P1SessionKey = rsa_decrypt.decrypt(Player1.recv(1024))
+        P1Hash = SHA256.new(P1SessionKey)
         #P1Signature = Player1.recv(1024)
+        try:
+            P1key = RSA.import_key(open('pub01RSA').read())
+            verifier = pss.new(P1key)
+            verifier.verify(P1Hash, P1Signature)
+        except:
+            print("P1 using DSA signature")
+        try:
+            file = open("pub01DSA.pem", "r")
+            P1key = DSA.import_key(file.read())
+            verifier = DSS.new(P1key, 'fips-186-3')
+            verifier.verify(P1Hash, P1Signature)
+        except:
+            print("P1 using RSA signature")
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
         #P2Signature = Player2.recv(1024)
+        try:
+            P2key = RSA.import_key(open('pub02RSA').read())
+            verifier = pss.new(P2key)
+            verifier.verify(P2Hash, P2Signature)
+        except:
+            print("P2 using DSA signature")
+        try:
+            file = open("pub02DSA.pem", "r")
+            P2key = DSA.import_key(file.read())
+            verifier = DSS.new(P2key, 'fips-186-3')
+            verifier.verify(P2Hash, P2Signature)
+        except:
+            print("P2 using RSA signature")
         P2cipher = AES.new(P2SessionKey, AES.MODE_ECB)
 
 	# Generates player one's numbers

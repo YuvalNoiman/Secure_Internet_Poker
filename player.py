@@ -1,12 +1,11 @@
 import socket
 import sys
-import secrets
-import string
 from Cryptodome.Util.Padding import pad, unpad
 from Cryptodome.PublicKey import RSA, DSA
 from Cryptodome.Cipher import AES, PKCS1_OAEP
 from Cryptodome.Signature import DSS, pss
 from Cryptodome.Hash import SHA256
+from Cryptodome.Random import get_random_bytes
 
 def main(player_number):
 
@@ -27,9 +26,8 @@ def main(player_number):
 
     #sends session key
     pubKey = RSA.import_key(open("pubhouse.pem").read())
-    PSessionKey = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-              for i in range(16))
-    PSessionKey = PSessionKey.encode()
+    PSessionKey = get_random_bytes(16)
+    #PSessionKey = PSessionKey.encode()
     rsa_encrypt = PKCS1_OAEP.new(pubKey, hashAlgo=None, mgfunc=None, randfunc=None)
     Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
     PSK = rsa_encrypt.encrypt(PSessionKey)

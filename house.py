@@ -1,5 +1,5 @@
 import socket
-from random import randint
+from Cryptodome.Random.random import randint
 from Cryptodome.Cipher import AES, PKCS1_OAEP
 from Cryptodome.Util.Padding import pad, unpad
 from Cryptodome.PublicKey import RSA, DSA

@@ -15,11 +15,15 @@ def main(player_number):
     if player_number == 1:
         Player.connect(("127.0.0.1", 1234)) #attempts to create at specified IP at specified port
         rsa_sig = RSA.import_key(open("priv01RSA.pem").read())
-        dsa_sig = open("priv01DSA.pem", "r")
+        dsa = open("priv01DSA.pem", "r")
+        dsa_sig = DSA.import_key(dsa.read())
+        dsa.close()
     else:
         Player.connect(("127.0.0.1", 1235)) #attempts to create at specified IP at specified port
         rsa_sig = RSA.import_key(open("priv02RSA.pem").read())
-        dsa_sig = open("priv02DSA.pem", "r")
+        dsa = open("priv02DSA.pem", "r")
+        dsa_sig = DSA.import_key(dsa.read())
+        dsa.close()
 
     #sends session key
     pubKey = RSA.import_key(open("pubhouse.pem").read())

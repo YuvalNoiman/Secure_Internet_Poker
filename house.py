@@ -97,6 +97,8 @@ def main():
         lost = lost.encode()
         won = "Round Won!\n"
         won = won.encode()
+        tie = "Round tied!\n"
+        tie = tie.encode()
         for x in range(3):
             P1num = Player1.recv(1024)
             P1num = unpad(P1cipher.decrypt(P1num),16)
@@ -106,18 +108,26 @@ def main():
                 Player1.send(P1cipher.encrypt(pad(lost, 16)))
                 Player2.send(P2cipher.encrypt(pad(won, 16)))
                 p2Score += 1
-            else:
+            elif (int(P1num.decode()) > int(P2num.decode())):
                 Player1.send(P1cipher.encrypt(pad(won, 16)))
                 Player2.send(P2cipher.encrypt(pad(lost, 16)))
                 p1Score += 1
+            else:
+                Player1.send(P1cipher.encrypt(pad(tie, 16)))
+                Player2.send(P2cipher.encrypt(pad(tie, 16)))
         winner = "You won!"
         loser = "You lost!"
+        tied = "You tied!"
+        tied = tied.encode()
         if (p1Score < p2Score):
             Player1.send(P1cipher.encrypt(pad(loser.encode(), 16)))
             Player2.send(P2cipher.encrypt(pad(winner.encode(), 16)))
-        else:
+        elif (p1Score > p2Score):
             Player1.send(P1cipher.encrypt(pad(winner.encode(), 16)))
             Player2.send(P2cipher.encrypt(pad(loser.encode(), 16)))
+        else:
+            Player1.send(P1cipher.encrypt(pad(tied, 16)))
+            Player2.send(P2cipher.encrypt(pad(tied, 16)))
 
         P1Again = Player1.recv(1024)
         P1Again = unpad(P1cipher.decrypt(P1Again),16)

@@ -32,8 +32,10 @@ def main():
         # Receive the data the client has to send.
         # This will receive at most 1024 bytes
         P1SessionKey = rsa_decrypt.decrypt(Player1.recv(1024))
+        P1Signature = Player1.recv(1024)
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
+        P2Signature = Player2.recv(1024)
         P2cipher = AES.new(P2SessionKey, AES.MODE_ECB)
 
 	# Generates player one's numbers

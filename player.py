@@ -14,14 +14,13 @@ def main(player_number):
     Player = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket created
     if player_number == 1:
         Player.connect(("127.0.0.1", 1234)) #attempts to create at specified IP at specified port
-        privKey = RSA.import_key(open("pub01.pem").read())	
     else:
-        Player.connect(("127.0.0.1", 1235)) #attempts to create at specified IP at specified port
-        privKey = RSA.import_key(open("pub02.pem").read())	
+        Player.connect(("127.0.0.1", 1235)) #attempts to create at specified IP at specified port	
     #sends session key
+    pubKey = RSA.import_key(open("pubhouse.pem").read())
     PSessionKey = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
               for i in range(16))
-    rsa_encrypt = PKCS1_OAEP.new(privKey, hashAlgo=None, mgfunc=None, randfunc=None)
+    rsa_encrypt = PKCS1_OAEP.new(pubKey, hashAlgo=None, mgfunc=None, randfunc=None)
     PSessionKey = PSessionKey.encode()
     Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
     PSK = rsa_encrypt.encrypt(PSessionKey)

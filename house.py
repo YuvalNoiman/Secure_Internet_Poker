@@ -50,6 +50,7 @@ def main():
             print("P1 using RSA signature")
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
+        P2Hash = SHA256.new(P2SessionKey)
         P2Signature = Player2.recv(1024)
         try:
             P2key = RSA.import_key(open("pub02RSA.pem").read())

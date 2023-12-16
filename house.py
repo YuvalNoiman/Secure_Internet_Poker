@@ -26,10 +26,6 @@ def main():
         print("Player1 connected from: " + str(P1Info))
         print("Player2 connected from: " + str(P2Info))
 
-        #PB1 = RSA.import_key(open("priv01.pem").read())
-        #PB2 = RSA.import_key(open("priv02.pem").read())
-        #rsa_decrypt1 = PKCS1_OAEP.new(PB1, hashAlgo=None, mgfunc=None, randfunc=None)
-        #rsa_decrypt2 = PKCS1_OAEP.new(PB2, hashAlgo=None, mgfunc=None, randfunc=None)
         privhouse = RSA.import_key(open("privhouse.pem").read())
         rsa_decrypt = PKCS1_OAEP.new(privhouse, hashAlgo=None, mgfunc=None, randfunc=None)
 

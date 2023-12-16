@@ -26,16 +26,16 @@ def main():
         print("Player1 connected from: " + str(P1Info))
         print("Player2 connected from: " + str(P2Info))
 
-        privhouse = RSA.import_key(open("privhouse.pem").read())
-        rsa_decrypt = PKCS1_OAEP.new(privhouse, hashAlgo=None, mgfunc=None, randfunc=None)
+        privKey = RSA.import_key(open("privhouse.pem").read())
+        rsa_decrypt = PKCS1_OAEP.new(privKey, hashAlgo=None, mgfunc=None, randfunc=None)
 
         # Receive the data the client has to send.
         # This will receive at most 1024 bytes
         P1SessionKey = rsa_decrypt.decrypt(Player1.recv(1024))
-        P1Signature = Player1.recv(1024)
+        #P1Signature = Player1.recv(1024)
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
-        P2Signature = Player2.recv(1024)
+        #P2Signature = Player2.recv(1024)
         P2cipher = AES.new(P2SessionKey, AES.MODE_ECB)
 
 	# Generates player one's numbers

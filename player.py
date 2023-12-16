@@ -44,7 +44,7 @@ def main(player_number):
     Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
     PSK = rsa_encrypt.encrypt(PSessionKey)
     Player.send(PSK)
-    Player.send(signature)
+    #Player.send(signature)
     pnumbers = Player.recv(1024)
     pnumbers = unpad(Pcipher.decrypt(pnumbers),16)
     Parray = pnumbers.decode().split(" ")

@@ -33,7 +33,7 @@ def main():
         # This will receive at most 1024 bytes
         P1SessionKey = rsa_decrypt.decrypt(Player1.recv(1024))
         P1Hash = SHA256.new(P1SessionKey)
-        #P1Signature = Player1.recv(1024)
+        P1Signature = Player1.recv(100000)
         try:
             P1key = RSA.import_key(open('pub01RSA').read())
             verifier = pss.new(P1key)
@@ -49,7 +49,7 @@ def main():
             print("P1 using RSA signature")
         P1cipher = AES.new(P1SessionKey, AES.MODE_ECB)
         P2SessionKey = rsa_decrypt.decrypt(Player2.recv(1024))
-        #P2Signature = Player2.recv(1024)
+        P2Signature = Player2.recv(100000)
         try:
             P2key = RSA.import_key(open('pub02RSA').read())
             verifier = pss.new(P2key)

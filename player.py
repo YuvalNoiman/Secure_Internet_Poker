@@ -27,6 +27,9 @@ def main(player_number):
               for i in range(16))
     PSessionKey = PSessionKey.encode()
     rsa_encrypt = PKCS1_OAEP.new(pubKey, hashAlgo=None, mgfunc=None, randfunc=None)
+    Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
+    PSK = rsa_encrypt.encrypt(PSessionKey)
+    Player.send(PSK)
     hash = SHA256.new(PSessionKey)
     #picks signature type
     while True:
@@ -41,10 +44,7 @@ def main(player_number):
         else:
             print("Type a valid number!")	
 
-    Pcipher = AES.new(PSessionKey, AES.MODE_ECB)
-    PSK = rsa_encrypt.encrypt(PSessionKey)
-    Player.send(PSK)
-    #Player.send(signature)
+    Player.send(signature)
     pnumbers = Player.recv(1024)
     pnumbers = unpad(Pcipher.decrypt(pnumbers),16)
     Parray = pnumbers.decode().split(" ")

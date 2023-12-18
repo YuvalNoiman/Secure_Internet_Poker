@@ -1,8 +1,12 @@
 # Secure_Internet_Poker
 Dylan Silva (dylansilva@csu.fullerton.edu)
+
 Brandon Mejia (branmejia21@csu.fullerton.edu)
+
 Braulio Martin (brauliom01@csu.fullerton.edu)
+
 Yuval Noiman (yuvalnoiman@csu.fullerton.edu)
+
 Edison Chung (edchung482@csu.fullerton)
 
 Everyone contributed to everthing adding to the code and the written document
